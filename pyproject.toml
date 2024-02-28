@@ -1,0 +1,48 @@
+[build-system]
+requires = [ "setuptools",]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "raccoon_spotter"
+readme = "README.md"
+dynamic = [ "dependencies", "version",]
+
+[project.scripts]
+raccoon-spotter = "raccoon_spotter.__main__:main"
+
+[tool.kedro]
+package_name = "raccoon_spotter"
+project_name = "raccoon-spotter"
+kedro_init_version = "0.19.2"
+tools = [ "Linting", "Testing", "Custom Logging", "Data Structure", "Kedro Viz",]
+example_pipeline = "True"
+source_dir = "src"
+
+[tool.ruff]
+line-length = 88
+show-fixes = true
+lint.select = [ "F", "W", "E", "I", "UP", "PL", "T201",]
+lint.ignore = [ "E501",]
+
+[project.entry-points."kedro.hooks"]
+
+[tool.pytest.ini_options]
+addopts = "--cov-report term-missing --cov src/raccoon_spotter -ra"
+
+[tool.coverage.report]
+fail_under = 0
+show_missing = true
+exclude_lines = [ "pragma: no cover", "raise NotImplementedError",]
+
+[tool.ruff.format]
+docstring-code-format = true
+
+[tool.setuptools.dynamic.dependencies]
+file = "requirements.txt"
+
+[tool.setuptools.dynamic.version]
+attr = "raccoon_spotter.__version__"
+
+[tool.setuptools.packages.find]
+where = [ "src",]
+namespaces = false

@@ -44,28 +44,28 @@ companies:
   dataset:
     type: pandas.CSVDataset
     filepath: "s3://spaceflights-pandas/data/01_raw/companies.csv"
-    credentials: dev_s3
+    credentials: aws_access
 
 reviews:
   type: CachedDataset
   dataset:
     type: pandas.CSVDataset
     filepath: s3://spaceflights-pandas/data/01_raw/reviews.csv
-    credentials: dev_s3
+    credentials: aws_access
 
 shuttles:
   type: CachedDataset
   dataset:
     type: pandas.ExcelDataset
     filepath: s3://spaceflights-pandas/data/01_raw/shuttles.xlsx
-    credentials: dev_s3
+    credentials: aws_access
     load_args:
       engine: openpyxl
 
 preprocessed_companies:
   type: pandas.ParquetDataset
   filepath: s3://spaceflights-pandas/data/02_intermediate/preprocessed_companies.pq
-  credentials: dev_s3
+  credentials: aws_access
 
 preprocessed_shuttles:
   type: pandas.ParquetDataset

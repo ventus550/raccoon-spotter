@@ -1,0 +1,60 @@
+name: Package kedro project
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+        cache: 'pipenv'
+    - name: Install dependencies
+      run: bash scripts/install-deps.sh
+    - name: Run ruff linter
+      run: pipenv run ruff check $(git ls-files '*.py') --show-files
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+        cache: 'pipenv'
+    - name: Install dependencies
+      run: bash scripts/install-deps.sh
+    - name: Run tests
+      run: pipenv run pytest
+
+  build:
+    runs-on: ubuntu-latest
+    needs: [lint, test]
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pipenv'
+      - name: Install dependencies
+        run: bash scripts/install-deps.sh
+      - name: Package project
+        run: |
+          pipenv requirements --exclude-markers | tail -n +2 > requirements.txt
+          pipenv run kedro package
+      - name: Run package
+        run: |
+          pip install dist/raccoon_spotter*
+          python -m raccoon_spotter --help

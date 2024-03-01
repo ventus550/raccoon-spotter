@@ -2,7 +2,7 @@
 ![](https://i.imgur.com/zodNdbL.png)
 
 ## Overview
-This project utilizes the Kedro framework to build and manage a deep learning pipeline for a simple raccoon object detection. We also incorporate Weights & Biases for monitoring and tracking experiments.
+This project utilizes the Kedro framework to build and manage a deep learning pipeline for a simple raccoon object detection. Data is stored in an S3 bucket. We also incorporate Weights & Biases for the monitoring and tracking of  experiments.
 
 ## Rules and guidelines
 * Don't remove any lines from the provided `.gitignore` file
@@ -27,6 +27,10 @@ This project utilizes the Kedro framework to build and manage a deep learning pi
 4. Enable pre-commit
 	```
 	pipenv run pre-commit install
+	```
+5. Authenticate with AWS
+	```
+	bash scripts/authenticate.sh <aws_access_key_id> <aws_secret_access_key>
 	```
 
 ## Workflow

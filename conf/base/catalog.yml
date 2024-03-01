@@ -40,22 +40,32 @@
 # https://kedro.readthedocs.io/en/stable/data/data_catalog.html
 
 companies:
-  type: pandas.CSVDataset
-  filepath: data/01_raw/companies.csv
+  type: CachedDataset
+  dataset:
+    type: pandas.CSVDataset
+    filepath: "s3://spaceflights-pandas/data/01_raw/companies.csv"
+    credentials: aws_access
 
 reviews:
-  type: pandas.CSVDataset
-  filepath: data/01_raw/reviews.csv
+  type: CachedDataset
+  dataset:
+    type: pandas.CSVDataset
+    filepath: s3://spaceflights-pandas/data/01_raw/reviews.csv
+    credentials: aws_access
 
 shuttles:
-  type: pandas.ExcelDataset
-  filepath: data/01_raw/shuttles.xlsx
-  load_args:
-    engine: openpyxl
+  type: CachedDataset
+  dataset:
+    type: pandas.ExcelDataset
+    filepath: s3://spaceflights-pandas/data/01_raw/shuttles.xlsx
+    credentials: aws_access
+    load_args:
+      engine: openpyxl
 
 preprocessed_companies:
   type: pandas.ParquetDataset
-  filepath: data/02_intermediate/preprocessed_companies.pq
+  filepath: s3://spaceflights-pandas/data/02_intermediate/preprocessed_companies.pq
+  credentials: aws_access
 
 preprocessed_shuttles:
   type: pandas.ParquetDataset

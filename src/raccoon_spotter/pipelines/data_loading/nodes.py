@@ -17,7 +17,7 @@ def _structure_data(raccoon_images=Dict[str, np.ndarray], raccoon_labels=pd.Data
 
 def construct_data_array(
     raccoon_images=Dict[str, np.ndarray], raccoon_labels=pd.DataFrame
-):
+) -> Dict[str, np.ndarray]:
     z = zip(*_structure_data(raccoon_images, raccoon_labels))
     x, y = tuple(z)
     return dict(x=np.array(x, dtype=object), y=np.array(y))

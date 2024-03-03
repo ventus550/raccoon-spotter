@@ -18,7 +18,7 @@ aws_access:
   client_kwargs:
     aws_access_key_id: $1
     aws_secret_access_key: $2
-    region_name: "eu-central-1"
+    region_name: "eu-west-2"
 EOF
 
 echo "Credentials written to conf/local/credentials.yaml"

@@ -17,9 +17,9 @@ data/**
 # also keep all .gitkeep files
 !.gitkeep
 
-# keep also the example dataset
-!data/01_raw/*
-
+# ignore artifacts
+stats.json
+session_store.db
 
 ##########################
 # Common files

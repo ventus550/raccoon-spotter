@@ -21,8 +21,18 @@ source_dir = "src"
 [tool.ruff]
 line-length = 88
 show-fixes = true
-lint.select = [ "F", "W", "E", "I", "UP", "PL", "T201",]
-lint.ignore = [ "E501",]
+
+[tool.ruff.lint]
+select = [ "F", "W", "E", "I", "UP", "PL", "T201" ]
+ignore = [ "E501",]
+# pylint.allow-magic-value-types = ["int"] 
+
+[tool.ruff.format]
+docstring-code-format = true
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
 
 [project.entry-points."kedro.hooks"]
 
@@ -34,8 +44,6 @@ fail_under = 0
 show_missing = true
 exclude_lines = [ "pragma: no cover", "raise NotImplementedError",]
 
-[tool.ruff.format]
-docstring-code-format = true
 
 [tool.setuptools.dynamic.dependencies]
 file = "requirements.txt"

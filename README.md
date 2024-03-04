@@ -54,9 +54,13 @@ To visualize the pipeline run:
 ```
 kedro viz run
 ```
+Use notebooks to access individual nodes and run experiments:
+```
+kedro jupyter notebook --no-browser
+```
 
 ### Testing
-Have a look at the files `src/tests/test_run.py` and `src/tests/pipelines/test_data_science.py` for instructions on how to write your tests. Run the tests as follows:
+Have a look at the files `src/tests/*` for examples on how to write your tests. Run the tests as follows:
 ```
 pytest
 ```

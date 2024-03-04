@@ -7,11 +7,12 @@ name = "pypi"
 ipython = ">=8.10"
 jupyterlab = ">=3.0"
 kedro = "~=0.19.2"
-kedro-datasets = {extras = ["plotly.JSONDataset", "pandas.ExcelDataset", "pandas.ParquetDataset", "pandas.CSVDataset", "plotly.PlotlyDataset", "matplotlib.MatplotlibWriter"], version = ">=1.0"}
+kedro-datasets = ">=1.0"
 kedro-viz = ">=6.7.0"
 notebook = "*"
 scikit-learn = "~=1.0"
 seaborn = "~=0.12.1"
+s3fs = "*"
 
 [dev-packages]
 pre-commit = "*"

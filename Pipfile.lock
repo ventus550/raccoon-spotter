@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "c6e47eea1b51c8e5c9307dd5449854af3c9ae8f46164a66b4d28dad9bca45cbe"
+            "sha256": "ab8328bcc772a57d513c0d6be2de700db5411908c2984d31946f7678e4ea0efe"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -1055,11 +1055,11 @@
         },
         "jupyter-lsp": {
             "hashes": [
-                "sha256:33dbcbc5df24237ff5c8b696b04ff4689fcd316cb8d4957d620fe5504d7d2c3f",
-                "sha256:57dd90d0a2e2530831793550846168c81c952b49e187aa339e455027a5f0fd2e"
+                "sha256:5e50033149344065348e688608f3c6d654ef06d9856b67655bd7b6bac9ee2d59",
+                "sha256:da61cb63a16b6dff5eac55c2699cc36eac975645adee02c41bdfc03bf4802e77"
             ],
             "markers": "python_version >= '3.8'",
-            "version": "==2.2.3"
+            "version": "==2.2.4"
         },
         "jupyter-server": {
             "hashes": [
@@ -1079,12 +1079,12 @@
         },
         "jupyterlab": {
             "hashes": [
-                "sha256:5d6348b3ed4085181499f621b7dfb6eb0b1f57f3586857aadfc8e3bf4c4885f9",
-                "sha256:aa88193f03cf4d3555f6712f04d74112b5eb85edd7d222c588c7603a26d33c5b"
+                "sha256:67dbec7057c6ad46f08a3667a80bdb890df9453822c93b5ddfd5e8313a718ef9",
+                "sha256:b85bd8766f995d23461e1f68a0cbc688d23e0af2b6f42a7768fc7b1826b2ec39"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.8'",
-            "version": "==4.1.2"
+            "version": "==4.1.3"
         },
         "jupyterlab-pygments": {
             "hashes": [
@@ -1110,6 +1110,15 @@
             "index": "pypi",
             "markers": "python_version >= '3.8'",
             "version": "==0.19.3"
+        },
+        "kedro-datasets": {
+            "hashes": [
+                "sha256:6a4aa94bd452852942ac8ee704d82bec01bce50d2729870f541fe4ef0a5dd1b5",
+                "sha256:a1fc515e50cae30a9ef1c64585a08319965bb839a1c96fa1f6748739376af282"
+            ],
+            "index": "pypi",
+            "markers": "python_version >= '3.9'",
+            "version": "==2.1.0"
         },
         "kedro-viz": {
             "hashes": [
@@ -1229,6 +1238,14 @@
             ],
             "markers": "python_version >= '3.7'",
             "version": "==1.4.5"
+        },
+        "lazy-loader": {
+            "hashes": [
+                "sha256:1e9e76ee8631e264c62ce10006718e80b2cfc74340d17d1031e0f84af7478554",
+                "sha256:3b68898e34f5b2a29daaaac172c6555512d0f32074f147e2254e4a6d9d838f37"
+            ],
+            "markers": "python_version >= '3.7'",
+            "version": "==0.3"
         },
         "markdown-it-py": {
             "hashes": [

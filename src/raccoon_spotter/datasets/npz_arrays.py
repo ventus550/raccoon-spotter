@@ -7,7 +7,7 @@ from kedro.io import AbstractDataset
 from kedro.io.core import get_filepath_str, get_protocol_and_path
 
 
-class NPZArray(AbstractDataset):
+class NPZArrayDataset(AbstractDataset):
     def __init__(self, filepath: str):
         protocol, path = get_protocol_and_path(filepath)
         self._protocol = protocol

@@ -1,7 +1,7 @@
 raccoon_images:
   type: CachedDataset
   dataset:
-    type: raccoon_spotter.datasets.zipped_images.ZippedImagesDataset
+    type: raccoon_spotter.datasets.ZippedImagesDataset
     filepath: s3://raccoon-spotter/raccoons1/images.zip
     credentials: aws_access
 
@@ -13,5 +13,5 @@ raccoon_labels:
     credentials: aws_access
 
 raccoon_data_array:
-  type: raccoon_spotter.datasets.npz_arrays.NPZArray
+  type: raccoon_spotter.datasets.NPZArrayDataset
   filepath: "data/02_intermediate/raccoon_data_array.npz"

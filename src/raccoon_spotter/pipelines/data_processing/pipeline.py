@@ -9,14 +9,14 @@ def create_pipeline(**kwargs) -> Pipeline:
             node(
                 func=reshape_image_arrays,
                 inputs=["raccoon_data_array"],
-                outputs="raccoon_data_reshaped_array",
-                name="reshaped_data_array_node",
+                outputs="reshaped_raccoon_data_array",
+                name="reshape_data_array_node",
             ),
             node(
                 func=resize_image_arrays,
-                inputs=["raccoon_data_reshaped_array"],
-                outputs="raccoon_data_resize_array",
-                name="resized_data_array_node",
+                inputs=["params:resize_image", "reshaped_raccoon_data_array"],
+                outputs="resized_raccoon_data_array",
+                name="resize_data_array_node",
             ),
         ]
     )

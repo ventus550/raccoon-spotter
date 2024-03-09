@@ -6,9 +6,10 @@ from raccoon_spotter.pipelines.data_processing.nodes import (
 )
 
 dummy_image_arrays = {
-    "x": np.array([np.ones((100, 100, 3)), np.ones((100, 100, 3))]),  # RGB images
+    "x": [np.ones((100, 100)), np.ones((400, 200, 3))],
     "y": np.array([0, 1]),
 }
+
 
 dummy_resize_config = {"target_width": 200, "target_height": 150}
 
@@ -23,12 +24,8 @@ def test_reshape_image_arrays():
     assert "x" in reshaped_dict
     assert "y" in reshaped_dict
     assert reshaped_dict["x"].shape[0] == num_img
-    assert (
-        reshaped_dict["x"][0].shape[2] == RGB_CHANNELS
-    )  # Number of channels for grayscale images
-    assert (
-        reshaped_dict["x"][1].shape[2] == RGB_CHANNELS
-    )  # Number of channels for RGB images
+    assert reshaped_dict["x"][0].shape[2] == RGB_CHANNELS  # grayscale img
+    assert reshaped_dict["x"][1].shape[2] == RGB_CHANNELS  # RGB img
     assert np.array_equal(reshaped_dict["y"], dummy_image_arrays["y"])
 
 

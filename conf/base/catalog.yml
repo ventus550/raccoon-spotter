@@ -15,3 +15,7 @@ raccoon_labels:
 raccoon_data_array:
   type: raccoon_spotter.datasets.NPZArrayDataset
   filepath: "data/02_intermediate/raccoon_data_array.npz"
+
+resized_raccoon_data_array:
+  type: raccoon_spotter.datasets.NPZArrayDataset
+  filepath: "data/03_primary/resized_raccoon_data_array.npz"

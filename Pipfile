@@ -13,6 +13,7 @@ notebook = "*"
 scikit-learn = "~=1.0"
 seaborn = "~=0.12.1"
 s3fs = "*"
+opencv-python = "*"
 
 [dev-packages]
 pre-commit = "*"

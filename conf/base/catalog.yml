@@ -9,13 +9,17 @@ raccoon_labels:
   type: CachedDataset
   dataset:
     type: pandas.CSVDataset
-    filepath: "s3://raccoon-spotter/raccoons1/labels.csv"
+    filepath: s3://raccoon-spotter/raccoons1/labels.csv
     credentials: aws_access
 
 raccoon_data_array:
   type: raccoon_spotter.datasets.NPZArrayDataset
-  filepath: "data/02_intermediate/raccoon_data_array.npz"
+  filepath: data/02_intermediate/raccoon_data_array.npz
 
-resized_raccoon_data_array:
+preprocessed_raccoon_data_array:
   type: raccoon_spotter.datasets.NPZArrayDataset
-  filepath: "data/03_primary/resized_raccoon_data_array.npz"
+  filepath: data/03_primary/preprocessed_raccoon_data_array.npz
+
+raccoon_features_data_array:
+  type: raccoon_spotter.datasets.NPZArrayDataset
+  filepath: "data/04_feature/raccoon_features_data_array.npz"

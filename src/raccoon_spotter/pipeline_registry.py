@@ -1,4 +1,5 @@
 """Project pipelines."""
+
 from typing import Dict
 
 from kedro.framework.project import find_pipelines
@@ -13,4 +14,9 @@ def register_pipelines() -> Dict[str, Pipeline]:
     """
     pipelines = find_pipelines()
     pipelines["__default__"] = sum(pipelines.values())
+    pipelines["etl"] = (
+        pipelines["data_loading"]
+        + pipelines["data_processing"]
+        + pipelines["feature_extraction"]
+    )
     return pipelines

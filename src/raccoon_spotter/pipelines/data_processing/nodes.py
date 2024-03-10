@@ -35,18 +35,18 @@ def reshape_image_arrays(image_arrays: np.ndarray) -> Dict[str, np.ndarray]:
 
 def _letterbox_image(img, inp_dim):
     """resize image with unchanged aspect ratio using padding"""
-    img_w, img_h = img.shape[1], img.shape[0]
+    img_h, img_w = img.shape[:2]
     w, h = inp_dim
-    new_w = int(img_w * min(w / img_w, h / img_h))
-    new_h = int(img_h * min(w / img_w, h / img_h))
+    scale = min(w / img_w, h / img_h)
+    new_w = int(img_w * scale)
+    new_h = int(img_h * scale)
+    pad_x = (w - new_w) // 2
+    pad_y = (h - new_h) // 2
+
     resized_image = cv2.resize(img, (new_w, new_h), interpolation=cv2.INTER_CUBIC)
-    canvas = np.full((inp_dim[1], inp_dim[0], 3), 128, dtype=np.uint8)
-    canvas[
-        (h - new_h) // 2 : (h - new_h) // 2 + new_h,
-        (w - new_w) // 2 : (w - new_w) // 2 + new_w,
-        :,
-    ] = resized_image
-    return canvas
+    canvas = np.full((h, w, 3), 128, dtype=np.uint8)
+    canvas[pad_y : pad_y + new_h, pad_x : pad_x + new_w] = resized_image
+    return canvas, pad_x, pad_y, scale
 
 
 def resize_image_arrays(
@@ -64,26 +64,24 @@ def resize_image_arrays(
      - A dictionary containing x (resized image array) and y (adjusted labels).
     """
     resized_arrays = []
-    original_image_sizes = []
-
+    pad_x_y = []
     target_width = resize_image_config["target_width"]
     target_height = resize_image_config["target_height"]
 
     for img in image_array["x"]:
-        original_size = img.shape[:2]
-        original_image_sizes.append(original_size)
-        resized_img = _letterbox_image(img, (target_width, target_height))
+        resized_img, pad_x, pad_y, scale = _letterbox_image(
+            img, (target_width, target_height)
+        )
         resized_arrays.append(resized_img)
+        pad_x_y.append((pad_x, pad_y, scale))
 
     resized_boxes = []
-    for bbox, original_size in zip(image_array["y"], original_image_sizes):
-        scale_x = target_width / original_size[1]
-        scale_y = target_height / original_size[0]
+    for bbox, (pad_x, pad_y, scale) in zip(image_array["y"], pad_x_y):
         resized_bbox = [
-            int(bbox[0] * scale_x),
-            int(bbox[1] * scale_x),
-            int(bbox[2] * scale_y),
-            int(bbox[3] * scale_y),
+            int((bbox[0] * scale) + pad_x),
+            int((bbox[1] * scale) + pad_x),
+            int((bbox[2] * scale) + pad_y),
+            int((bbox[3] * scale) + pad_y),
         ]
         resized_boxes.append(resized_bbox)
 

@@ -8,11 +8,11 @@ from kedro.io.core import get_filepath_str, get_protocol_and_path
 
 
 class NPZArrayDataset(AbstractDataset):
-    def __init__(self, filepath: str):
+    def __init__(self, filepath: str, credentials: dict = {}):
         protocol, path = get_protocol_and_path(filepath)
         self._protocol = protocol
         self._filepath = PurePosixPath(path)
-        self._fs = fsspec.filesystem(self._protocol)
+        self._fs = fsspec.filesystem(self._protocol, **credentials.copy())
 
     def _load(self) -> Dict[str, np.ndarray]:
         load_path = get_filepath_str(self._filepath, self._protocol)

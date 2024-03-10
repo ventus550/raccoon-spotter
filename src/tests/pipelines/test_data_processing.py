@@ -1,8 +1,8 @@
 import numpy as np
 import pytest
 from raccoon_spotter.pipelines.data_processing.nodes import (
-    reshape_image_arrays,
-    resize_image_arrays,
+    add_rgb_channel_to_image_arrays,
+    pad_image_arrays,
 )
 
 dummy_image_arrays = {
@@ -18,8 +18,8 @@ num_img = len(dummy_image_arrays["x"])
 
 
 @pytest.fixture
-def test_reshape_image_arrays():
-    reshaped_dict = reshape_image_arrays(dummy_image_arrays)
+def test_add_rgb_channel_to_image_arrays():
+    reshaped_dict = add_rgb_channel_to_image_arrays(dummy_image_arrays)
     assert isinstance(reshaped_dict, dict)
     assert "x" in reshaped_dict
     assert "y" in reshaped_dict
@@ -30,8 +30,8 @@ def test_reshape_image_arrays():
 
 
 @pytest.fixture
-def test_resize_image_arrays():
-    resized_dict = resize_image_arrays(dummy_image_arrays, dummy_image_arrays)
+def test_pad_image_arrays():
+    resized_dict = pad_image_arrays(dummy_image_arrays, dummy_image_arrays)
     assert isinstance(resized_dict, dict)
     assert "x" in resized_dict
     assert "y" in resized_dict

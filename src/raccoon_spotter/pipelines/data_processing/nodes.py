@@ -4,7 +4,7 @@ import cv2
 import numpy as np
 
 
-def reshape_image_arrays(image_arrays: np.ndarray) -> Dict[str, np.ndarray]:
+def add_rgb_channel_to_image_arrays(image_arrays: np.ndarray) -> Dict[str, np.ndarray]:
     """
     Add a color channel for greyscale images.
 
@@ -49,26 +49,29 @@ def _letterbox_image(img, inp_dim):
     return canvas, pad_x, pad_y, scale
 
 
-def resize_image_arrays(
-    resize_image_config: dict, image_array: np.ndarray
+def pad_image_arrays(
+    image_arrays: np.ndarray, padded_shape: dict, padding: bool
 ) -> Dict[str, np.ndarray]:
     """
     Resize the image while adjusting the corresponding bounding box.
 
     Args:
-    - image_array (np.ndarray): The image array to be resized.
-    - target_width (int): The target width for resizing (default: 600).
-    - target_height (int): The target height for resizing (default: 400).
+    - image_arrays (np.ndarray): The image array to be resized.
+    - width (int): The target width for resizing (default: 600).
+    - height (int): The target height for resizing (default: 400).
 
     Returns:
      - A dictionary containing x (resized image array) and y (adjusted labels).
     """
+    if not padding:
+        return image_arrays
+
     resized_arrays = []
     pad_x_y = []
-    target_width = resize_image_config["target_width"]
-    target_height = resize_image_config["target_height"]
+    target_width = padded_shape["width"]
+    target_height = padded_shape["height"]
 
-    for img in image_array["x"]:
+    for img in image_arrays["x"]:
         resized_img, pad_x, pad_y, scale = _letterbox_image(
             img, (target_width, target_height)
         )
@@ -76,7 +79,7 @@ def resize_image_arrays(
         pad_x_y.append((pad_x, pad_y, scale))
 
     resized_boxes = []
-    for bbox, (pad_x, pad_y, scale) in zip(image_array["y"], pad_x_y):
+    for bbox, (pad_x, pad_y, scale) in zip(image_arrays["y"], pad_x_y):
         resized_bbox = [
             int((bbox[0] * scale) + pad_x),
             int((bbox[1] * scale) + pad_x),

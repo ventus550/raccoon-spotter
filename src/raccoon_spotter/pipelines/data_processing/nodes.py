@@ -19,7 +19,8 @@ def add_rgb_channel_to_image_arrays(image_arrays: np.ndarray) -> Dict[str, np.nd
     reshaped_arrays = []
     for img_array in image_arrays["x"]:
         if len(img_array.shape) == GRAYSCALE_CHANNELS:
-            converted_array = cv2.cvtColor(img_array, cv2.COLOR_GRAY2RGB)
+            grayscale_array = img_array.astype(np.uint8)
+            converted_array = cv2.cvtColor(grayscale_array, cv2.COLOR_GRAY2RGB)
             reshaped_arrays.append(converted_array)
         elif len(img_array.shape) != RGB_CHANNELS:
             raise ValueError(

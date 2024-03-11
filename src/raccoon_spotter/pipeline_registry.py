@@ -19,4 +19,5 @@ def register_pipelines() -> Dict[str, Pipeline]:
         + pipelines["data_processing"]
         + pipelines["feature_extraction"]
     )
+    pipelines["train"] = pipelines["model_training"]
     return pipelines

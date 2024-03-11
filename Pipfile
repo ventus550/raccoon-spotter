@@ -14,6 +14,8 @@ scikit-learn = "~=1.0"
 seaborn = "~=0.12.1"
 s3fs = "*"
 opencv-python = "*"
+tensorflow = "==2.16.1"
+keras = "*"
 
 [dev-packages]
 pre-commit = "*"

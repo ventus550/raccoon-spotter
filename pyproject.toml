@@ -24,7 +24,7 @@ show-fixes = true
 
 [tool.ruff.lint]
 select = [ "F", "W", "E", "I", "UP", "PL", "T201" ]
-ignore = [ "E501",]
+ignore = [ "E501", "F405", "F403"]
 # pylint.allow-magic-value-types = ["int"] 
 
 [tool.ruff.format]

@@ -12,14 +12,8 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up Python 3.10
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.10'
-        cache: 'pipenv'
-    - name: Install dependencies
-      run: bash scripts/install-deps.sh
+    - uses: actions/checkout@v3
+    - uses: ./.github/actions/setup
     - name: Run ruff linter
       run: pipenv run ruff check $(git ls-files '*.py') --show-files
 
@@ -27,13 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - name: Set up Python 3.10
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.10'
-        cache: 'pipenv'
-    - name: Install dependencies
-      run: bash scripts/install-deps.sh
+    - uses: ./.github/actions/setup
     - name: Run tests
       run: pipenv run pytest
 
@@ -41,15 +29,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: [lint, test]
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-          cache: 'pipenv'
-      - name: Install dependencies
-        run: bash scripts/install-deps.sh
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
       - name: Package project
         run: |
           pipenv requirements --exclude-markers | tail -n +2 > requirements.txt

@@ -1,24 +1,19 @@
-from pathlib import PurePosixPath
 from typing import Any, Dict
 from zipfile import ZipFile
 
-import fsspec
 import numpy as np
-from kedro.io import AbstractDataset
-from kedro.io.core import get_filepath_str, get_protocol_and_path
 from PIL import Image
 
+from .abstract_filesystem import AbstractFileSystemDataset
 
-class ZippedImagesDataset(AbstractDataset[np.ndarray, np.ndarray]):
+
+class ZippedImagesDataset(AbstractFileSystemDataset[np.ndarray, np.ndarray]):
     def __init__(self, filepath: str, credentials: dict, extension: str = ".jpg"):
-        protocol, path = get_protocol_and_path(filepath)
-        self._protocol = protocol
-        self._filepath = PurePosixPath(path)
-        self._fs = fsspec.filesystem(self._protocol, **credentials.copy())
+        super().__init__(filepath, fsspec_kwargs=credentials)
         self._ext = extension
 
     def _load(self) -> Dict[str, np.array]:
-        load_path = get_filepath_str(self._filepath, self._protocol)
+        load_path = self._get_filepath_str()
         with self._fs.open(load_path, mode="rb") as file:
             with ZipFile(file, "r") as zipped:
                 return {

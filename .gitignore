@@ -21,6 +21,9 @@ data/**
 stats.json
 session_store.db
 
+# ignore weights and biases logs
+wandb
+
 ##########################
 # Common files
 

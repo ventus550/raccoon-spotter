@@ -4,7 +4,7 @@ import logging
 from keras import Model
 
 import wandb
-from raccoon_spotter.utils.configs import configs, credentials
+from raccoon_spotter.utils.configs import configs, loader
 from wandb.keras import (
     WandbMetricsLogger,
     WandbModelCheckpoint,
@@ -15,7 +15,7 @@ class Client:
     def __init__(self):
         self.enabled = True
         try:
-            wandb.login(key=credentials["wandb_access"])
+            wandb.login(key=loader["credentials"]["wandb_access"])
         except KeyError:
             self.enabled = False
             logging.getLogger("WeightsAndBiasesClient").warning(

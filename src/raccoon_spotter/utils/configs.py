@@ -5,5 +5,3 @@ loader = OmegaConfigLoader("conf")
 configs = OmegaConfigLoader("conf", config_patterns={"configs": ["**/configs.yml"]})[
     "configs"
 ]
-
-credentials = OmegaConfigLoader("conf")["credentials"]

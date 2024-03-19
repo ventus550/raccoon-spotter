@@ -1,1 +1,1 @@
-from .configs import configs, loader, credentials  # NOQA
+from .configs import configs, loader  # NOQA

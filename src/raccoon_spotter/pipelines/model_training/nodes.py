@@ -16,9 +16,6 @@ def build_model() -> Model:
 
 def train_model(training_data_arrays: np.ndarray, model: Model) -> Model:
     X, Y = training_data_arrays.values()
-    callbacks = None
-    if (wandb := Client()).enabled:
-        Logs, _ = wandb.init_from_keras_model(model)
-        callbacks = [Logs(log_freq=1)]
-    model.fit(X, Y, epochs=10, callbacks=callbacks)
+    wandb = Client.from_keras_model(model)
+    model.fit(X, Y, epochs=2, callbacks=[wandb.keras.WandbMetricsLogger(log_freq=1)])
     return model

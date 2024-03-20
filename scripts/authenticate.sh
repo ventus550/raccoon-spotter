@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Check if both access key ID and secret access key are provided
-if [ $# -ne 2 ]; then
-    echo "Usage: $0 <aws_access_key_id> <aws_secret_access_key>"
+if [ $# -ne 2 ] && [ $# -ne 3 ]; then
+echo "Usage: $0 {aws_access_key_id} {aws_secret_access_key} [wandb_access_key]"
     exit 1
 fi
 
@@ -19,6 +19,7 @@ aws_access:
     aws_access_key_id: $1
     aws_secret_access_key: $2
     region_name: "eu-west-2"
+wandb_access: $3
 EOF
 
 echo "Credentials written to conf/local/credentials.yaml"

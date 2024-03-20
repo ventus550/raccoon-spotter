@@ -1,1 +1,9 @@
+# Global seed for the project.
 seed: 123
+
+# Set environment variables for weights and biases.
+# For the full list of available options refer to the documentation.
+# (https://docs.wandb.ai/guides/track/environment-variables)
+wandb:
+  mode: offline
+  silent: true

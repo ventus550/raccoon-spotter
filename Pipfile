@@ -16,6 +16,7 @@ s3fs = "*"
 opencv-python = "*"
 tensorflow = "==2.16.1"
 keras = "*"
+wandb = "*"
 
 [dev-packages]
 pre-commit = "*"

@@ -19,7 +19,7 @@ def train_model(
 ) -> Model:
     X, Y = training_data_arrays.values()
     wandb = Client.from_keras_model(model)
-    wandb.logger.info(f"Logging training data to {wandb.run.get_url() or 'local'}.")
+    wandb.log(f"Logging training data to {wandb.run.get_url() or 'local'}.")
     log_freq = training_args.pop("log_freq")
     model.fit(
         X, Y, callbacks=[wandb.keras.WandbMetricsLogger(log_freq)], **training_args
@@ -32,6 +32,6 @@ def upload_model(model: Model, temporary_save_path: str, skip: bool):
     if not skip and wandb.online:
         model.save(temporary_save_path)
         wandb.link_model(path=temporary_save_path, registered_model_name=model.name)
-        wandb.logger.info("Model uploaded successfully.")
+        wandb.log("Model uploaded successfully.")
     else:
-        wandb.logger.info("Skipping model upload.")
+        wandb.log("Skipping model upload.")

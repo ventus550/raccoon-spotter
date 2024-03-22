@@ -1,0 +1,3 @@
+upload:
+  skip: false
+  temporary_save_path: /tmp/model.keras

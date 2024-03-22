@@ -5,5 +5,5 @@ seed: 123
 # For the full list of available options refer to the documentation.
 # (https://docs.wandb.ai/guides/track/environment-variables)
 wandb:
-  mode: offline
+  mode: online
   silent: true

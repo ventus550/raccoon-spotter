@@ -19,3 +19,9 @@ def train_model(training_data_arrays: np.ndarray, model: Model) -> Model:
     wandb = Client.from_keras_model(model)
     model.fit(X, Y, epochs=2, callbacks=[wandb.keras.WandbMetricsLogger(log_freq=1)])
     return model
+
+
+def upload_model(model: Model, temporary_save_path: str, skip: bool):
+    if not skip:
+        model.save(temporary_save_path)
+        Client().save(temporary_save_path)

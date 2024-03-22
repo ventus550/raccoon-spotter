@@ -1,6 +1,6 @@
 from kedro.pipeline import Pipeline, node, pipeline
 
-from .nodes import build_model, train_model
+from .nodes import build_model, train_model, upload_model
 
 
 def create_pipeline(**kwargs) -> Pipeline:
@@ -17,6 +17,16 @@ def create_pipeline(**kwargs) -> Pipeline:
                 inputs=["raccoon_features_data_array", "pretrained_model"],
                 outputs="trained_model",
                 name="train_model_node",
+            ),
+            node(
+                func=upload_model,
+                inputs=[
+                    "trained_model",
+                    "params:upload.temporary_save_path",
+                    "params:upload.skip",
+                ],
+                outputs=None,
+                name="upload_model_node",
             ),
         ]
     )

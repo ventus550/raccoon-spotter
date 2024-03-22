@@ -1,11 +1,12 @@
 import tensorflow as tf
 from keras.layers import *
+
 from raccoon_spotter.models.components.spatial_pyramid_pooling import (
     SpatialPyramidPooling,
 )
 
 
-def build_model(name: str = __name__):
+def build_model(name: str = __name__.split(sep=".")[-1]):
     return tf.keras.Sequential(
         [
             tf.keras.Input(shape=(None, None, 3)),

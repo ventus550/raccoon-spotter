@@ -14,8 +14,24 @@ def build_model() -> Model:
     return model
 
 
-def train_model(training_data_arrays: np.ndarray, model: Model) -> Model:
+def train_model(
+    training_data_arrays: np.ndarray, model: Model, training_args: dict
+) -> Model:
     X, Y = training_data_arrays.values()
     wandb = Client.from_keras_model(model)
-    model.fit(X, Y, epochs=2, callbacks=[wandb.keras.WandbMetricsLogger(log_freq=1)])
+    wandb.log(f"Logging training data to {wandb.run.get_url() or 'local'}.")
+    log_freq = training_args.pop("log_freq")
+    model.fit(
+        X, Y, callbacks=[wandb.keras.WandbMetricsLogger(log_freq)], **training_args
+    )
     return model
+
+
+def upload_model(model: Model, temporary_save_path: str, skip: bool):
+    wandb = Client()
+    if not skip and wandb.online:
+        model.save(temporary_save_path)
+        wandb.link_model(path=temporary_save_path, registered_model_name=model.name)
+        wandb.log("Model uploaded successfully.")
+    else:
+        wandb.log("Skipping model upload.")

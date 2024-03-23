@@ -1,0 +1,8 @@
+training:
+  epochs: 1
+  batch_size: 32
+  log_freq: 1
+
+upload:
+  skip: false
+  temporary_save_path: /tmp/model.keras

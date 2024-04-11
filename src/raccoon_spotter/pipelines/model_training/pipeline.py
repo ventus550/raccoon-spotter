@@ -9,14 +9,14 @@ def create_pipeline(**kwargs) -> Pipeline:
             node(
                 func=build_model,
                 inputs=None,
-                outputs="pretrained_model",
+                outputs="untrained_model",
                 name="build_model_node",
             ),
             node(
                 func=train_model,
                 inputs=[
                     "raccoon_features_data_array",
-                    "pretrained_model",
+                    "untrained_model",
                     "params:training",
                 ],
                 outputs="trained_model",

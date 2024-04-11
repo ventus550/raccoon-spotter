@@ -24,9 +24,9 @@ raccoon_features_data_array:
   type: raccoon_spotter.datasets.NPZArrayDataset
   filepath: "data/04_feature/raccoon_features_data_array.npz"
 
-pretrained_model:
+untrained_model:
   type: raccoon_spotter.datasets.KerasModelDataset
-  filepath: data/06_models/pretrained_model.keras
+  filepath: data/06_models/untrained_model.keras
 
 trained_model:
   type: raccoon_spotter.datasets.KerasModelDataset

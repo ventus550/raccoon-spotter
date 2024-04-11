@@ -17,6 +17,7 @@ opencv-python = "*"
 tensorflow = "==2.16.1"
 keras = "*"
 wandb = "*"
+mplcyberpunk = "*"
 
 [dev-packages]
 pre-commit = "*"

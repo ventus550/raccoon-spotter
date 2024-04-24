@@ -2,10 +2,11 @@ import logging
 
 import numpy as np
 from keras import Model
+import matplotlib.pyplot as plt
 
 from raccoon_spotter.models.architectures import simple_regressor
 from raccoon_spotter.utils.wandb import Client
-
+from raccoon_spotter.utils.data_visualization import draw_bounding_box
 
 def build_model() -> Model:
     model = simple_regressor.build_model()
@@ -26,6 +27,14 @@ def train_model(
     )
     return model
 
+def sample_model(training_data_arrays: np.ndarray, model: Model):
+    X, Y = training_data_arrays.values()
+    P = model.predict(X).astype(int)
+    fig, axs = plt.subplots(6, 2, figsize=(12, 24))
+    for i, ax in enumerate(axs):
+        ax[0].imshow(draw_bounding_box(X[i*2], Y[i*2]))
+        ax[1].imshow(draw_bounding_box(X[i*2], P[i*2]))
+    return fig
 
 def upload_model(model: Model, temporary_save_path: str, skip: bool):
     wandb = Client()

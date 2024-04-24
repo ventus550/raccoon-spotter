@@ -27,6 +27,7 @@ This project utilizes the Kedro framework to build and manage a deep learning pi
 4. Enable pre-commit
 	```
 	pipenv run pre-commit install
+	pipenv run nb-clean add-filter --remove-empty-cells
 	```
 5. Authenticate with AWS
 	```

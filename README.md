@@ -29,9 +29,9 @@ This project utilizes the Kedro framework to build and manage a deep learning pi
 	pipenv run pre-commit install
 	pipenv run nb-clean add-filter --remove-empty-cells
 	```
-5. Authenticate with AWS
+5. Authenticate with external serivices
 	```
-	bash scripts/authenticate.sh <aws_access_key_id> <aws_secret_access_key>
+	kedro authenticate
 	```
 
 ## Workflow

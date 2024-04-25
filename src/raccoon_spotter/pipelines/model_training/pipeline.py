@@ -14,7 +14,7 @@ def create_pipeline(**kwargs) -> Pipeline:
             node(
                 func=train_model,
                 inputs=[
-                    "raccoon_features_data_array",
+                    "raccoon_train_features_data_array",
                     "untrained_model",
                     "params:training",
                 ],
@@ -23,7 +23,7 @@ def create_pipeline(**kwargs) -> Pipeline:
             node(
                 func=sample_model,
                 inputs=[
-                    "raccoon_features_data_array",
+                    "raccoon_test_features_data_array",
                     "trained_model"
                 ],
                 outputs="sampled_predictions",

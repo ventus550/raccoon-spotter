@@ -7,28 +7,33 @@ import seaborn as sns
 from matplotlib import pyplot as plt
 from matplotlib.patches import Patch
 
+def _dim_image(image, dim_factor):
+    return cv2.convertScaleAbs(image, alpha=dim_factor, beta=0)
 
-def draw_bounding_box(image_array: np.ndarray, bounding_box: np.ndarray) -> np.ndarray:
+# Function to superimpose a region on an image
+def _superimpose_region(background, region, minx, maxx, miny, maxy):
+    # Superimpose the region on the background
+    background[miny:maxy, minx:maxx] = region
+
+    # Draw a border around the region
+    cv2.rectangle(background, (minx, miny), (maxx, maxy), (0, 255, 0), 1)
+    return background 
+
+def roi(image: np.ndarray, box: np.ndarray) -> np.ndarray:
     """
-    Draw bounding boxes on the image.
+    Highlight the region of intereset of the image.
 
     Parameters:
-    - image_array (np.ndarray): The image array.
-    - bounding_boxes (np.ndarray): xmin, xmax, ymin, ymax.
+    - image (np.ndarray): The image array.
+    - box (np.ndarray): xmin, xmax, ymin, ymax.
 
     Returns:
-    - img_with_boxes (np.ndarray): The image array with the bounding boxes drawn.
+    - roi (np.ndarray): The image array with the region of intereset highlighted.
     """
-    img = image_array.copy()
-    img_with_boxes = cv2.rectangle(
-        img,
-        (bounding_box[0], bounding_box[2]),
-        (bounding_box[1], bounding_box[3]),
-        (255, 0, 0),
-        2,
-    )
-    return img_with_boxes
-
+    xmin, xmax, ymin, ymax = box
+    dimmed_image = _dim_image(image, dim_factor=0.5)
+    region = image[ymin:ymax, xmin:xmax]
+    return np.array(_superimpose_region(dimmed_image, region, xmin, xmax, ymin, ymax))
 
 def radialplot(categories, data, intervals=8):
     """

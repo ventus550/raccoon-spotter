@@ -31,7 +31,7 @@ def roi(image: np.ndarray, box: np.ndarray) -> np.ndarray:
     - roi (np.ndarray): The image array with the region of intereset highlighted.
     """
     xmin, xmax, ymin, ymax = box
-    dimmed_image = _dim_image(image, dim_factor=0.5)
+    dimmed_image = _dim_image(image, dim_factor=0.64)
     region = image[ymin:ymax, xmin:xmax]
     return np.array(_superimpose_region(dimmed_image, region, xmin, xmax, ymin, ymax))
 

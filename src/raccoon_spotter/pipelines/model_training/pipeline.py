@@ -10,7 +10,6 @@ def create_pipeline(**kwargs) -> Pipeline:
                 func=build_model,
                 inputs=None,
                 outputs="untrained_model",
-                name="build_model_node",
             ),
             node(
                 func=train_model,
@@ -20,7 +19,6 @@ def create_pipeline(**kwargs) -> Pipeline:
                     "params:training",
                 ],
                 outputs="trained_model",
-                name="train_model_node",
             ),
             node(
                 func=sample_model,
@@ -29,7 +27,6 @@ def create_pipeline(**kwargs) -> Pipeline:
                     "trained_model"
                 ],
                 outputs="sampled_predictions",
-                name="sample_model_node",
             ),
             node(
                 func=upload_model,
@@ -39,7 +36,6 @@ def create_pipeline(**kwargs) -> Pipeline:
                     "params:upload.skip",
                 ],
                 outputs=None,
-                name="upload_model_node",
             ),
         ]
     )

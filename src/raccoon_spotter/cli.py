@@ -1,4 +1,9 @@
 import os
+import nb_clean
+import pathlib
+from typing import cast
+import nbformat
+
 
 """Command line tools for manipulating a Kedro project.
 Intended to be invoked via `kedro`."""
@@ -10,7 +15,7 @@ def cli():
     """Command line tools for manipulating a Kedro project."""
 
 @cli.command()
-@click.option("--override", type=bool, default=False, is_flag=True)
+@click.option("--override", type=bool, default=False, is_flag=True, help="Override credentials if present.")
 def authenticate(override=False):
     click.secho((
         "Welcome to the authentication procedure.\n"
@@ -42,3 +47,55 @@ wandb_access: {wandb_access}
         file.write(yaml_content)
 
     print("Credentials written to conf/local/credentials.yaml")
+
+@cli.group()
+def clean():
+    """Kedro cleaning tools."""
+
+@clean.command()
+def data():
+    click.secho("Deleting local data..." ,fg='yellow')
+    def remove_files_except_gitkeep(directory):
+        for item in os.listdir(directory):
+            item_path = os.path.join(directory, item)
+            if os.path.isdir(item_path):
+                remove_files_except_gitkeep(item_path)
+            elif item != ".gitkeep":
+                os.remove(item_path)
+
+        # After removing files, check if the directory is empty
+        if not os.listdir(directory) and directory != ".":
+            os.rmdir(directory)
+
+    try:
+        remove_files_except_gitkeep("data")
+    except:
+        click.secho("Data cleaning procedure has encountered an error." ,fg='red')
+    else:
+        click.secho("Done." ,fg='yellow')
+
+@clean.command()
+def notebooks():
+
+    def read_notebook(filepath: pathlib.Path) -> nbformat.NotebookNode:
+        return cast(
+            nbformat.NotebookNode,
+            nbformat.read(filepath, as_version=nbformat.NO_CONVERT),  # type: ignore[no-untyped-call]
+        )
+
+    def sanitize_notebook(filepath: pathlib.Path):
+        notebook = read_notebook(filepath)
+        notebook = nb_clean.clean_notebook(notebook, remove_empty_cells=True)
+        nbformat.write(notebook, filepath)
+
+    def sanitize_directory(dir):
+        for path in dir.iterdir():            
+            if path.is_file() and path.suffix == ".ipynb":
+                try:
+                    sanitize_notebook(path)
+                except:
+                    click.secho(f"Failed to sanitize {path}!", fg="red")
+            if path.is_dir():
+                sanitize_directory(path)
+    
+    sanitize_directory(pathlib.Path(__file__).parent.parent.parent / "notebooks")

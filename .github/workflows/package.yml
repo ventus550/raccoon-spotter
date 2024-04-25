@@ -37,6 +37,6 @@ jobs:
           pipenv run kedro package
       - name: Run package
         run: |
-          bash scripts/authenticate.sh ${{ vars.aws_access_key_id }} ${{ secrets.aws_secret_access_key }}
+          pipenv run kedro authenticate <<< $'${{ vars.aws_access_key_id }}\n${{ secrets.aws_secret_access_key }}\n'
           pip install dist/raccoon_spotter*
           python -m raccoon_spotter

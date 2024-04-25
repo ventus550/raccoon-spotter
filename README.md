@@ -59,6 +59,11 @@ Use notebooks to access individual nodes and run experiments:
 ```
 kedro jupyter notebook --no-browser
 ```
+Cleaning the local project data:
+```
+kedro clean data
+kedro clean notebooks
+```
 
 ### Testing
 Have a look at the files `src/tests/*` for examples on how to write your tests. Run the tests as follows:

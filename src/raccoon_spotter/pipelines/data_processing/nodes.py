@@ -35,7 +35,7 @@ def add_rgb_channel_to_image_arrays(image_arrays: np.ndarray) -> Dict[str, np.nd
 
 
 def _letterbox_image(img, inp_dim):
-    """resize image with unchanged aspect ratio using padding"""
+    """Resize image with unchanged aspect ratio using padding"""
     img_h, img_w = img.shape[:2]
     w, h = inp_dim
     scale = min(w / img_w, h / img_h)
@@ -45,7 +45,7 @@ def _letterbox_image(img, inp_dim):
     pad_y = (h - new_h) // 2
 
     resized_image = cv2.resize(img, (new_w, new_h), interpolation=cv2.INTER_CUBIC)
-    canvas = np.full((h, w, 3), 128, dtype=np.uint8)
+    canvas = np.full((h, w, 3), 0, dtype=np.uint8)
     canvas[pad_y : pad_y + new_h, pad_x : pad_x + new_w] = resized_image
     return canvas, pad_x, pad_y, scale
 

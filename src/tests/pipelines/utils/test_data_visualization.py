@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 import pytest
-from raccoon_spotter.utils.data_visualization import draw_bounding_box
+from raccoon_spotter.utils.data_visualization import roi
 
 
 class TestDrawBoundingBox:
@@ -15,8 +15,8 @@ class TestDrawBoundingBox:
                     np.zeros((100, 100, 3), dtype=np.uint8),
                     (20, 80),
                     (30, 90),
-                    (255, 0, 0),
-                    2,
+                    (0, 255, 0),
+                    1,
                 ),
             ),
             (
@@ -26,12 +26,15 @@ class TestDrawBoundingBox:
                     np.zeros((150, 200, 3), dtype=np.uint8),
                     (50, 60),
                     (100, 120),
-                    (255, 0, 0),
-                    2,
+                    (0, 255, 0),
+                    1,
                 ),
             ),
         ],
     )
-    def test_draw_bounding_box(self, image_array, bounding_box, expected):
-        result = draw_bounding_box(image_array, bounding_box)
-        assert np.array_equal(result, expected), "Bounding box not drawn correctly"
+    def test_roi(self, image_array, bounding_box, expected):
+        xmin, xmax, ymin, ymax = bounding_box
+        result = roi(image_array, bounding_box)
+        assert np.array_equal(
+            result[ymin:ymax, xmin:xmax], expected[ymin:ymax, xmin:xmax]
+        ), "Bounding box not drawn correctly"

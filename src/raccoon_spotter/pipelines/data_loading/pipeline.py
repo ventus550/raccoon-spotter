@@ -10,13 +10,11 @@ def create_pipeline(**kwargs) -> Pipeline:
                 func=construct_data_array,
                 inputs=["raccoon_images", "raccoon_labels"],
                 outputs="raccoon_data_array",
-                name="construct_data_array_node",
             ),
             node(
                 func=print,
                 inputs="raccoon_data_array",
                 outputs=None,
-                name="print_raccoon_data_array",
             ),
         ]
     )

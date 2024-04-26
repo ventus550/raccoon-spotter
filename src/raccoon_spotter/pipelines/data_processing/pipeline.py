@@ -10,7 +10,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                 func=add_rgb_channel_to_image_arrays,
                 inputs=["raccoon_data_array"],
                 outputs="rgb_raccoon_data_array",
-                name="add_rgb_channel_node",
+                name="add_rgb_channel",
             ),
             node(
                 func=pad_image_arrays,
@@ -20,7 +20,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                     "params:padding",
                 ],
                 outputs="preprocessed_raccoon_data_array",
-                name="apply_padding_node",
+                name="apply_padding",
             ),
         ]
     )

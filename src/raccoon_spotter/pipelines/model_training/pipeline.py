@@ -10,26 +10,23 @@ def create_pipeline(**kwargs) -> Pipeline:
                 func=build_model,
                 inputs=None,
                 outputs="untrained_model",
-                name="build_model_node",
             ),
             node(
                 func=train_model,
                 inputs=[
-                    "raccoon_features_data_array",
+                    "raccoon_train_features_data_array",
                     "untrained_model",
                     "params:training",
                 ],
                 outputs="trained_model",
-                name="train_model_node",
             ),
             node(
                 func=sample_model,
                 inputs=[
-                    "raccoon_features_data_array",
+                    "raccoon_test_features_data_array",
                     "trained_model"
                 ],
                 outputs="sampled_predictions",
-                name="sample_model_node",
             ),
             node(
                 func=upload_model,
@@ -39,7 +36,6 @@ def create_pipeline(**kwargs) -> Pipeline:
                     "params:upload.skip",
                 ],
                 outputs=None,
-                name="upload_model_node",
             ),
         ]
     )

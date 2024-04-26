@@ -3,10 +3,29 @@ import random
 
 import numpy as np
 import keras
-import tensorflow
+import mplcyberpunk
+import matplotlib as mpl
 from kedro.framework.hooks import hook_impl
 
 from .utils import configs
+
+
+class MatplotlibSettingsHook:
+    @hook_impl
+    def before_node_run(self):
+        mpl.style.use("cyberpunk")
+        rc = {
+            "axes.grid": False,
+            "axes.spines.left": False,
+            "axes.spines.right": False,
+            "axes.spines.bottom": False,
+            "axes.spines.top": False,
+            "xtick.bottom": False,
+            "xtick.labelbottom": False,
+            "ytick.labelleft": False,
+            "ytick.left": False,
+        }
+        mpl.rcParams.update(rc)
 
 
 class SeedPipelineHook:
@@ -16,6 +35,8 @@ class SeedPipelineHook:
 
     @hook_impl
     def before_pipeline_run(self) -> None:
+        import tensorflow
+
         seed = configs["seed"]
 
         # Set seed for Python's random module

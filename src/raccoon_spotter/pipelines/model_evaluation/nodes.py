@@ -1,26 +1,58 @@
+import matplotlib.pyplot as plt
 import numpy as np
-from sklearn.model_selection import train_test_split
+from keras import Model
 
+from raccoon_spotter.utils.data_visualization import radialplot, roi
 from raccoon_spotter.utils.metrics import cos, iou, mse
+from raccoon_spotter.utils.wandb import Client
 
 
-def split_data(features_data_arr: np.ndarray, split_dataset: dict):
-    X = features_data_arr["x"]
-    y = features_data_arr["y"]
-    X_train, X_test, y_train, y_test = train_test_split(
-        X,
-        y,
-        test_size=split_dataset["test_size"],
-        random_state=split_dataset["random_state"],
-        shuffle=split_dataset["shuffle"],
-    )
-    return X_test, y_test
-
-
-def evaluate_model(trained_model, X_test: np.ndarray, y_test: np.ndarray) -> dict:
-    y_pred = trained_model.predict(X_test)
-    mse_score = mse(y_test, y_pred)
-    cos_score = cos(y_test, y_pred)
-    iou_score = iou(y_test, y_pred)
-    metrics = {"mse": mse_score, "cosine_similarity": cos_score, "iou": iou_score}
+def evaluate_model(trained_model: Model, testing_data_arrays: np.ndarray) -> dict:
+    X, Y = testing_data_arrays.values()
+    P = trained_model.predict(X)
+    metrics = {"mse": mse(Y, P), "cos": cos(Y, P), "iou": iou(Y, P)}
+    Client().log(metrics)
     return metrics
+
+
+def radialplot_comparison(
+    trained_model: Model,
+    untrained_model: Model,
+    testing_data_arrays: np.ndarray,
+) -> dict:
+    trained_model_metrics = evaluate_model(trained_model, testing_data_arrays)
+    untrained_model_metrics = evaluate_model(untrained_model, testing_data_arrays)
+
+    mse1, cos1, iou1 = trained_model_metrics.values()
+    mse0, cos0, iou0 = untrained_model_metrics.values()
+
+    def scaled(array):
+        return array / max(array)
+
+    mse0, mse1 = scaled(np.array([mse0, mse1]))
+    cos0, cos1 = scaled(np.array([1 + cos0, 1 + cos1]))
+    iou0, iou1 = scaled(np.array([1 - iou0, 1 - iou1]))
+
+    return radialplot(
+        [
+            "\nMean\nSquared\nError",
+            "\nCosine\nSimilarity",
+            "Intersection\nOver\nUnion\nComplement",
+        ],
+        dict(
+            untrained_model=[mse0, cos0, iou0],
+            trained_model=[mse1, cos1, iou1],
+        ),
+        intervals=9,
+    )
+
+
+def sample_model(model: Model, training_data_arrays: np.ndarray):
+    X, Y = training_data_arrays.values()
+    P = model.predict(X).astype(int)
+    assert len(P) >= 6  # noqa: PLR2004
+    fig, axs = plt.subplots(6, 2, figsize=(12, 24))
+    for i, ax in enumerate(axs):
+        ax[0].imshow(roi(X[i], Y[i]))
+        ax[1].imshow(roi(X[i], P[i]))
+    return fig

@@ -31,8 +31,11 @@ class Client:
     def __getattr__(self, attr):
         return getattr(wandb, attr) or self
 
-    def log(self, msg: str, level=logging.INFO):
+    def msg(self, msg: str, level=logging.INFO):
         self.logger.log(level, f"[yellow]{msg}", extra={"markup": True})
+
+    def log(self, data: dict, **kwargs):
+        self.run.log(data, **kwargs)
 
     @property
     def online(self):

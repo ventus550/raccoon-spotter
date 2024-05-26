@@ -1,13 +1,12 @@
 import logging
 import random
 
-import numpy as np
 import keras
-import mplcyberpunk
 import matplotlib as mpl
+import numpy as np
 from kedro.framework.hooks import hook_impl
 
-from .utils import configs
+from .utils.configs import configs
 
 
 class MatplotlibSettingsHook:

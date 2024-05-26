@@ -5,8 +5,12 @@ import cv2
 import numpy as np
 from flask import Flask, jsonify, render_template, request
 from gevent.pywsgi import WSGIServer
+from imports.components import *
+
+# imports are the source of an external code that is copied during contenerization
+from imports.utils.data_conversion import base64_to_pil
+from imports.utils.data_visualization import roi
 from tensorflow import keras
-from util import SpatialPyramidPooling, base64_to_pil, roi
 
 app = Flask(__name__)
 

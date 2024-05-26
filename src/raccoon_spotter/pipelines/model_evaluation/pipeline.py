@@ -1,24 +1,29 @@
 from kedro.pipeline import Pipeline, node, pipeline
 
-from .nodes import evaluate_model, split_data
+from .nodes import evaluate_model, radialplot_comparison, sample_model
 
 
 def create_pipeline(**kwargs) -> Pipeline:
     return pipeline(
         [
             node(
-                func=split_data,
-                inputs=["raccoon_features_data_array", "params:split_dataset"],
-                outputs=["X_test", "y_test"],
+                func=evaluate_model,
+                inputs=["trained_model", "raccoon_test_features_data_array"],
+                outputs="metrics",
             ),
             node(
-                func=evaluate_model,
-                inputs={
-                    "trained_model": "trained_model",
-                    "X_test": "X_test",
-                    "y_test": "y_test",
-                },
-                outputs="metrics",
+                func=sample_model,
+                inputs=["trained_model", "raccoon_test_features_data_array"],
+                outputs="sampled_predictions",
+            ),
+            node(
+                func=radialplot_comparison,
+                inputs=[
+                    "trained_model",
+                    "untrained_model",
+                    "raccoon_test_features_data_array",
+                ],
+                outputs="radialplot_comparison",
             ),
         ]
     )

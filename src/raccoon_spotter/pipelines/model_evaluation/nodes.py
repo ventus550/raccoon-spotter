@@ -1,3 +1,4 @@
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 from keras import Model
@@ -32,6 +33,19 @@ def radialplot_comparison(
     mse0, mse1 = scaled(np.array([mse0, mse1]))
     cos0, cos1 = scaled(np.array([1 + cos0, 1 + cos1]))
     iou0, iou1 = scaled(np.array([1 - iou0, 1 - iou1]))
+
+    rc = {
+        "axes.grid": True,
+        "axes.spines.left": True,
+        "axes.spines.right": True,
+        "axes.spines.bottom": True,
+        "axes.spines.top": True,
+        "xtick.bottom": True,
+        "xtick.labelbottom": True,
+        "ytick.labelleft": True,
+        "ytick.left": True,
+    }
+    mpl.rcParams.update(rc)
 
     return radialplot(
         [

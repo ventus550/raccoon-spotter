@@ -74,3 +74,29 @@ To configure the coverage threshold, look at the `.coveragerc` file.
 
 ### Linting
 Ruff linting is done automatically on each commit.
+
+## Application
+### Local deployment
+Build and run a dockerized application with:
+```
+kedro app
+```
+You can also specify a custom model path by adding `--model <path>` option.
+Models are imported from `data/06_models/trained_model.keras` by default.
+
+### API Usage
+#### <strong>Endpoint:</strong> `/predict`  
+<strong>Method:</strong> POST  
+<strong>Request Body:</strong> JSON containing a base64 encoded image string.
+
+```json
+{ "image": "base64_encoded_image_data" }
+``` 
+
+<strong>Response:</strong> JSON object with the processed image encoded in base64.
+
+```json
+{ "image_base64": "processed_image_data" }
+```
+
+For technical details have a look at the Dockerfile and the `app/` files.

@@ -3,12 +3,12 @@ import logging
 import numpy as np
 from keras import Model
 
-from raccoon_spotter.models.architectures import bayesian_regressor
+from raccoon_spotter.models.architectures import bayesian_inceptor
 from raccoon_spotter.utils.wandb import Client
 
 
 def build_model() -> Model:
-    model = bayesian_regressor.build_model()
+    model = bayesian_inceptor.build_model()
     model.compile(loss="mse", optimizer="adam", metrics=["cosine_similarity", "mse"])
     model.summary(print_fn=lambda x, **kwargs: logging.getLogger(__name__).info(x))
     return model
@@ -28,7 +28,7 @@ def train_model(
 
 
 def upload_model(model: Model, temporary_save_path: str, skip: bool):
-    wandb = Client()
+    wandb = Client.from_keras_model(model)
     if not skip and wandb.online:
         model.save(temporary_save_path)
         wandb.link_model(path=temporary_save_path, registered_model_name=model.name)

@@ -11,7 +11,7 @@ from wandb import errors
 
 class Client:
     def __init__(self, name=None, config={}, **kwargs):
-        wandb_configs = configs["wandb"]
+        wandb_configs = configs["wandb"].copy()
         self.mode = wandb_configs.pop("mode", "offline")
         self.logger = logging.getLogger(__name__)
         for key, value in wandb_configs.items():

@@ -1,9 +1,7 @@
 import tensorflow as tf
 from keras.layers import *
 
-from raccoon_spotter.models.components.spatial_pyramid_pooling import (
-    SpatialPyramidPooling,
-)
+from raccoon_spotter.models.components import *
 
 
 def build_model(name: str = __name__.split(sep=".")[-1]):

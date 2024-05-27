@@ -7,21 +7,23 @@ import seaborn as sns
 from matplotlib import pyplot as plt
 from matplotlib.patches import Patch
 
+
 def _dim_image(image, dim_factor):
     return cv2.convertScaleAbs(image, alpha=dim_factor, beta=0)
 
-# Function to superimpose a region on an image
-def _superimpose_region(background, region, minx, maxx, miny, maxy):
+
+def _superimpose_region(background, region, minx, maxx, miny, maxy):  # noqa: PLR0913
     # Superimpose the region on the background
     background[miny:maxy, minx:maxx] = region
 
     # Draw a border around the region
     cv2.rectangle(background, (minx, miny), (maxx, maxy), (0, 255, 0), 1)
-    return background 
+    return background
+
 
 def roi(image: np.ndarray, box: np.ndarray) -> np.ndarray:
     """
-    Highlight the region of intereset of the image.
+    Highlight the region of interest of the image.
 
     Parameters:
     - image (np.ndarray): The image array.
@@ -34,6 +36,7 @@ def roi(image: np.ndarray, box: np.ndarray) -> np.ndarray:
     dimmed_image = _dim_image(image, dim_factor=0.64)
     region = image[ymin:ymax, xmin:xmax]
     return np.array(_superimpose_region(dimmed_image, region, xmin, xmax, ymin, ymax))
+
 
 def radialplot(categories, data, intervals=8):
     """

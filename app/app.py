@@ -1,12 +1,27 @@
 import base64
 import os
+import signal
+import sys
 
+import click
 import cv2
 import numpy as np
 from flask import Flask, jsonify, render_template, request
 from gevent.pywsgi import WSGIServer
+from imports.components import *
+
+# imports are the source of an external code that is copied during contenerization
+from imports.utils.data_conversion import base64_to_pil
+from imports.utils.data_visualization import roi
 from tensorflow import keras
-from util import SpatialPyramidPooling, base64_to_pil, roi
+
+
+def catch(sig, frame):
+    click.secho("Application terminated successfully.", fg="yellow")
+    sys.exit(0)
+
+
+signal.signal(signal.SIGINT, catch)
 
 app = Flask(__name__)
 
@@ -50,4 +65,5 @@ def predict():
 
 if __name__ == "__main__":
     http_server = WSGIServer(("0.0.0.0", 5000), app)
+    click.secho("Application running at http://localhost:5000.", fg="yellow")
     http_server.serve_forever()

@@ -28,7 +28,7 @@ def train_model(
 
 
 def upload_model(model: Model, temporary_save_path: str, skip: bool):
-    wandb = Client()
+    wandb = Client.from_keras_model(model)
     if not skip and wandb.online:
         model.save(temporary_save_path)
         wandb.link_model(path=temporary_save_path, registered_model_name=model.name)

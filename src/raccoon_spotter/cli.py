@@ -1,17 +1,19 @@
+# Command line tools for manipulating a Kedro project.
+# Intended to be invoked via `kedro`.
+
+
 import os
-import nb_clean
 import pathlib
+import subprocess
 from typing import cast
-import nbformat
 
-
-"""Command line tools for manipulating a Kedro project.
-Intended to be invoked via `kedro`."""
 import click
+import nb_clean
+import nbformat
 from kedro.framework.cli.project import (
     ASYNC_ARG_HELP,
-    CONFIG_FILE_HELP,
     CONF_SOURCE_HELP,
+    CONFIG_FILE_HELP,
     FROM_INPUTS_HELP,
     FROM_NODES_HELP,
     LOAD_VERSION_HELP,
@@ -27,11 +29,11 @@ from kedro.framework.cli.project import (
 from kedro.framework.cli.utils import (
     CONTEXT_SETTINGS,
     _config_file_callback,
-    _split_params,
     _split_load_versions,
+    _split_params,
     env_option,
-    split_string,
     split_node_names,
+    split_string,
 )
 from kedro.framework.session import KedroSession
 from kedro.utils import load_obj
@@ -41,6 +43,7 @@ from kedro.utils import load_obj
 def cli():
     """Command line tools for manipulating a Kedro project."""
 
+
 @project_group.command()
 @click.option(
     "--from-inputs", type=str, default="", help=FROM_INPUTS_HELP, callback=split_string
@@ -49,12 +52,18 @@ def cli():
     "--to-outputs", type=str, default="", help=TO_OUTPUTS_HELP, callback=split_string
 )
 @click.option(
-    "--from-nodes", type=str, default="", help=FROM_NODES_HELP, callback=split_node_names
+    "--from-nodes",
+    type=str,
+    default="",
+    help=FROM_NODES_HELP,
+    callback=split_node_names,
 )
 @click.option(
     "--to-nodes", type=str, default="", help=TO_NODES_HELP, callback=split_node_names
 )
-@click.option("--nodes", "-n", "node_names", type=str, multiple=True, help=NODE_ARG_HELP)
+@click.option(
+    "--nodes", "-n", "node_names", type=str, multiple=True, help=NODE_ARG_HELP
+)
 @click.option(
     "--runner", "-r", type=str, default=None, multiple=False, help=RUNNER_ARG_HELP
 )
@@ -89,7 +98,7 @@ def cli():
     help=PARAMS_ARG_HELP,
     callback=_split_params,
 )
-def run(
+def run(  # noqa: PLR0913
     tags,
     env,
     runner,
@@ -128,23 +137,38 @@ def run(
 
 
 @cli.command()
-@click.option("--override", type=bool, default=False, is_flag=True, help="Override credentials if present.")
+@click.option(
+    "--override",
+    type=bool,
+    default=False,
+    is_flag=True,
+    help="Override credentials if present.",
+)
 def authenticate(override=False):
-    click.secho((
-        "Welcome to the authentication procedure.\n"
-        "This protocol will guide you through the creation of your conf/local/credentials.yaml file.\n"
-        "The information you are about to enter is sensitive and should not be shared with other users.\n"
-    ),fg='yellow')
+    click.secho(
+        (
+            "Welcome to the authentication procedure.\n"
+            "This protocol will guide you through the creation of your conf/local/credentials.yaml file.\n"
+            "The information you are about to enter is sensitive and should not be shared with other users.\n"
+        ),
+        fg="yellow",
+    )
     aws_access_key_id = click.prompt("aws_access_key_id", type=str)
     aws_secret_access_key = click.prompt("aws_secret_access_key", type=str)
-    wandb_access = click.prompt("[wandb_access]", type=str, default="", show_default=False)
+    wandb_access = click.prompt(
+        "[wandb_access]", type=str, default="", show_default=False
+    )
 
     # Check if conf/local directory exists
     if not os.path.isdir("conf/local"):
-        raise click.UsageError("conf/local directory does not exist. Make sure you're in the root of the project.")
+        raise click.UsageError(
+            "conf/local directory does not exist. Make sure you're in the root of the project."
+        )
 
     if os.path.exists("conf/local/credentials.yaml") and not override:
-        raise click.UsageError("conf/local/credentials.yaml already exists. Remove it or specify --override option to replace it.")
+        raise click.UsageError(
+            "conf/local/credentials.yaml already exists. Remove it or specify --override option to replace it."
+        )
 
     # Prepare the YAML content
     yaml_content = f"""\
@@ -159,15 +183,18 @@ wandb_access: {wandb_access}
     with open("conf/local/credentials.yaml", "w") as file:
         file.write(yaml_content)
 
-    print("Credentials written to conf/local/credentials.yaml")
+    click.secho("Credentials written to conf/local/credentials.yaml", fg="yellow")
+
 
 @cli.group()
 def clean():
     """Kedro cleaning tools."""
 
+
 @clean.command()
 def data():
-    click.secho("Deleting local data..." ,fg='yellow')
+    click.secho("Deleting local data...", fg="yellow")
+
     def remove_files_except_gitkeep(directory):
         for item in os.listdir(directory):
             item_path = os.path.join(directory, item)
@@ -182,10 +209,11 @@ def data():
 
     try:
         remove_files_except_gitkeep("data")
-    except:
-        click.secho("Data cleaning procedure has encountered an error." ,fg='red')
+    except Exception:
+        click.secho("Data cleaning procedure has encountered an error.", fg="red")
     else:
-        click.secho("Done." ,fg='yellow')
+        click.secho("Done.", fg="yellow")
+
 
 @clean.command()
 def notebooks():
@@ -201,13 +229,39 @@ def notebooks():
         nbformat.write(notebook, filepath)
 
     def sanitize_directory(dir):
-        for path in dir.iterdir():            
+        for path in dir.iterdir():
             if path.is_file() and path.suffix == ".ipynb":
                 try:
                     sanitize_notebook(path)
-                except:
+                except Exception:
                     click.secho(f"Failed to sanitize {path}!", fg="red")
             if path.is_dir():
                 sanitize_directory(path)
-    
+
     sanitize_directory(pathlib.Path(__file__).parent.parent.parent / "notebooks")
+
+
+@cli.command()
+@click.option(
+    "--model",
+    "-m",
+    type=click.Path(exists=True, dir_okay=False, resolve_path=False),
+    help="Model path to be used for this application instance.",
+)
+def app(model=None):
+    click.secho("Starting application building process.", fg="yellow")
+
+    if model:
+        click.secho(f"Using custom model path ({model}).", fg="yellow")
+        model = f"--build-arg MODEL_PATH={model}"
+
+    subprocess.run(
+        ["sudo", "bash", "-c", f"docker build {model or ''} -t raccoon-spotter ."],
+        text=True,
+        check=True,
+    )
+
+    subprocess.run(
+        ["sudo", "bash", "-c", "docker run -it --rm -p 5000:5000 raccoon-spotter"],
+        check=False,
+    )

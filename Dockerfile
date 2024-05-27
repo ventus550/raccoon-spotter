@@ -1,8 +1,10 @@
 FROM python:3.10-slim-buster
 
+ARG MODEL_PATH=data/06_models/trained_model.keras
+
 WORKDIR /
 COPY app .
-COPY data/06_models/trained_model.keras /models/trained_model.keras
+COPY ${MODEL_PATH} models/trained_model.keras
 COPY src/raccoon_spotter/models/components imports/components
 COPY src/raccoon_spotter/utils imports/utils
 

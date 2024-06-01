@@ -3,12 +3,12 @@ import logging
 import numpy as np
 from keras import Model
 
-from raccoon_spotter.models.architectures import bayesian_inceptor
+from raccoon_spotter.models.architectures import bayesian_deep_regressor
 from raccoon_spotter.utils.wandb import Client
 
 
 def build_model() -> Model:
-    model = bayesian_inceptor.build_model()
+    model = bayesian_deep_regressor.build_model()
     model.compile(loss="mse", optimizer="adam", metrics=["cosine_similarity", "mse"])
     model.summary(print_fn=lambda x, **kwargs: logging.getLogger(__name__).info(x))
     return model

@@ -12,16 +12,24 @@ def _dim_image(image, dim_factor):
     return cv2.convertScaleAbs(image, alpha=dim_factor, beta=0)
 
 
-def _superimpose_region(background, region, minx, maxx, miny, maxy):  # noqa: PLR0913
+def _superimpose_region(  # noqa: PLR0913
+    background,
+    region,
+    minx,
+    maxx,
+    miny,
+    maxy,
+    rec=1,  # noqa: PLR0913
+):  # noqa: PLR0913
     # Superimpose the region on the background
     background[miny:maxy, minx:maxx] = region
 
     # Draw a border around the region
-    cv2.rectangle(background, (minx, miny), (maxx, maxy), (0, 255, 0), 1)
+    cv2.rectangle(background, (minx, miny), (maxx, maxy), (0, 255, 0), rec)
     return background
 
 
-def roi(image: np.ndarray, box: np.ndarray) -> np.ndarray:
+def roi(image: np.ndarray, box: np.ndarray, dim=0.64, rec=1) -> np.ndarray:
     """
     Highlight the region of interest of the image.
 
@@ -33,9 +41,11 @@ def roi(image: np.ndarray, box: np.ndarray) -> np.ndarray:
     - roi (np.ndarray): The image array with the region of intereset highlighted.
     """
     xmin, xmax, ymin, ymax = box
-    dimmed_image = _dim_image(image, dim_factor=0.64)
+    dimmed_image = _dim_image(image, dim_factor=dim)
     region = image[ymin:ymax, xmin:xmax]
-    return np.array(_superimpose_region(dimmed_image, region, xmin, xmax, ymin, ymax))
+    return np.array(
+        _superimpose_region(dimmed_image, region, xmin, xmax, ymin, ymax, rec=rec)
+    )
 
 
 def radialplot(categories, data, intervals=8):

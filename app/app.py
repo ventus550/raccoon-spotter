@@ -36,6 +36,13 @@ def model_predict(img, model):
     img = np.array(img.convert("RGB"))
     img = cv2.resize(img, (600, 400), interpolation=cv2.INTER_LINEAR)
 
+    preds = np.squeeze(
+        [model.predict(np.expand_dims(img, axis=0)) for _ in range(100)]
+    ).astype(int)
+    return np.mean(
+        [roi(img, p, dim=0.2, rec=0) for p in preds], axis=0, dtype=int
+    ).astype(np.uint8)
+
     preds = model.predict(np.expand_dims(img, axis=0))
 
     img_with_box = roi(img, preds[0].astype(int))

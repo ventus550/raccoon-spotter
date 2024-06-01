@@ -12,7 +12,7 @@ def evaluate_model(trained_model: Model, testing_data_arrays: np.ndarray) -> dic
     X, Y = testing_data_arrays.values()
     P = trained_model.predict(X)
     metrics = {"mse": mse(Y, P), "cos": cos(Y, P), "iou": iou(Y, P)}
-    Client().log(metrics)
+    Client().run.summary.update(metrics)
     return metrics
 
 

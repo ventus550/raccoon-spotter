@@ -21,7 +21,7 @@ class BayesDense(keras.layers.Layer):
         units,
         prior_mu=0,
         prior_sigma=0.1,
-        alpha=1,
+        alpha=0.1,
         bias=True,
         activation="linear",
         **kwargs,
@@ -78,10 +78,10 @@ class BayesDense(keras.layers.Layer):
                 ops.size(self.weight_mu) + ops.size(self.bias_mu), dtype="float32"
             )
         )
-        weight = self.weight_mu + ops.exp(self.weight_log_sigma) * keras.random.normal(
+        weight = self.weight_mu + ops.exp(self.weight_log_sigma) * keras.random.uniform(
             self.weight_log_sigma.shape
         )
-        bias = self.bias_mu + ops.exp(self.bias_log_sigma) * keras.random.normal(
+        bias = self.bias_mu + ops.exp(self.bias_log_sigma) * keras.random.uniform(
             self.bias_log_sigma.shape
         )
         return self.activation(x @ weight + bias)
